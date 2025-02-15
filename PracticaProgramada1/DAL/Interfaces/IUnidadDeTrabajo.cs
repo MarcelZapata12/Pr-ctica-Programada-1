@@ -6,7 +6,9 @@ using System.Threading.Tasks;
 
 namespace DAL.Interfaces
 {
-    public interface IUnidadDeTrabajo
+    public interface IUnidadDeTrabajo : IDisposable
     {
+        IPersonaDAL PersonaDAL { get; }
+        bool Complete();
     }
 }

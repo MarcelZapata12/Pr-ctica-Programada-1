@@ -7,12 +7,8 @@ using System.Threading.Tasks;
 
 namespace DAL.Interfaces
 {
-    public interface IPersonaDAl
+    public interface IPersonaDAL : IDALGenerico<Persona>
     {
-        bool AddPersona(Persona persona);
-        bool UpdatePersona(Persona persona);
-        bool DeletePersona(int id);
-        List<Persona> GetPersonas();
-
+        List<Persona> GetAllPersonas();
     }
 }

@@ -1,5 +1,7 @@
 ﻿using Abstracciones.Abstracciones;
 using DAL.Interfaces;
+using Microsoft.Data.SqlClient;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,38 +10,151 @@ using System.Threading.Tasks;
 
 namespace DAL.Implementations
 {
-    public class PersonaDAL : IPersonaDAl
+    public class PersonaDAL : DALGenericoImpl<Persona>, IPersonaDAL
     {
         private PracticaProgramada1Context _context;
-        public PersonaDAL(PracticaProgramada1Context context)
+
+        public PersonaDAL(PracticaProgramada1Context context) : base(context)
         {
             _context = context;
         }
-        public bool AddPersona(Persona persona)
+
+        public List<Persona> GetAllPersonas()
         {
-            try 
+            string query = "sp_GetAllPersonas";
+
+            var result = _context.Personas.FromSqlRaw(query);
+
+            return result.ToList();
+        }
+
+        public bool Add(Persona entity)
+        {
+            try
             {
-                _context.Personas.Add(persona);
-                _context.SaveChanges();
+                string sql = "exec [dbo].[sp_AddPersona] @Identificación, @Nombre, @PrimerApellido, @SegundoApellido";
+
+                var param = new SqlParameter[]
+                {
+                    new SqlParameter()
+                    {
+                        ParameterName = "@Identificación",
+                        SqlDbType = System.Data.SqlDbType.VarChar,
+                        Value = entity.Identificación
+                    },
+                    new SqlParameter()
+                    {
+                        ParameterName = "@Nombre",
+                        SqlDbType = System.Data.SqlDbType.VarChar,
+                        Value = entity.Nombre
+                    },
+                    new SqlParameter()
+                    {
+                        ParameterName = "@PrimerApellido",
+                        SqlDbType = System.Data.SqlDbType.VarChar,
+                        Value = entity.PrimerApellido
+                    },
+                    new SqlParameter()
+                    {
+                        ParameterName = "@SegundoApellido",
+                        SqlDbType = System.Data.SqlDbType.VarChar,
+                        Value = entity.SegundoApellido
+                    }
+                };
+
+                _context.Database.ExecuteSqlRaw(sql, param);
                 return true;
             }
-            catch (Exception)
+            catch (Exception e)
             {
                 return false;
             }
         }
-        public bool DeletePersona(int id)
+
+        public void DeletePersona(int id)
         {
-            throw new NotImplementedException();
-        }
-        public List<Persona> GetPersonas()
-        {
-            throw new NotImplementedException();
-        }
-        public bool UpdatePersona(Persona persona)
-        {
-            throw new NotImplementedException();
+            try
+            {
+                string sql = "exec [dbo].[sp_DeletePersona] @Id";
+
+                var param = new SqlParameter[]
+                {
+                    new SqlParameter()
+                    {
+                        ParameterName = "@Id",
+                        SqlDbType = System.Data.SqlDbType.Int,
+                        Value = id
+                    }
+                };
+
+                _context.Database.ExecuteSqlRaw(sql, param);
+            }
+            catch (Exception e)
+            {
+            }
         }
 
+        public List<Persona> GetPersonas()
+        {
+            try
+            {
+                string sql = "exec [dbo].[sp_GetAllPersonas]";
+
+                var result = _context.Personas.FromSqlRaw(sql).ToList();
+                return result;
+            }
+            catch (Exception e)
+            {
+                return new List<Persona>();
+            }
+        }
+
+        public void UpdatePersona(Persona entity)
+        {
+            try
+            {
+                string sql = "exec [dbo].[sp_UpdatePersona] @Id, @Identificación, @Nombre, @PrimerApellido, @SegundoApellido";
+
+                var param = new SqlParameter[]
+                {
+                    new SqlParameter()
+                    {
+                        ParameterName = "@Id",
+                        SqlDbType = System.Data.SqlDbType.Int,
+                        Value = entity.Id
+                    },
+                    new SqlParameter()
+                    {
+                        ParameterName = "@Identificación",
+                        SqlDbType = System.Data.SqlDbType.VarChar,
+                        Value = entity.Identificación
+                    },
+                    new SqlParameter()
+                    {
+                        ParameterName = "@Nombre",
+                        SqlDbType = System.Data.SqlDbType.VarChar,
+                        Value = entity.Nombre
+                    },
+                    new SqlParameter()
+                    {
+                        ParameterName = "@PrimerApellido",
+                        SqlDbType = System.Data.SqlDbType.VarChar,
+                        Value = entity.PrimerApellido
+                    },
+                    new SqlParameter()
+                    {
+                        ParameterName = "@SegundoApellido",
+                        SqlDbType = System.Data.SqlDbType.VarChar,
+                        Value = entity.SegundoApellido
+                    }
+                };
+
+                _context.Database.ExecuteSqlRaw(sql, param);
+            }
+            catch (Exception e)
+            {
+
+            }
+        }
     }
 }

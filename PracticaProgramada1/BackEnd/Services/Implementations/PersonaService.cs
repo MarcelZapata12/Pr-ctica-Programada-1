@@ -1,35 +1,81 @@
 ﻿using Abstracciones.Abstracciones;
+using BackEnd.DTO;
 using BackEnd.Services.Interfaces;
-using DAL.Implementations;
 using DAL.Interfaces;
+using System.Collections.Generic;
 
 namespace BackEnd.Services.Implementations
 {
     public class PersonaService : IPersonaService
-
     {
-        private IPersonaDAl _personaDAL;
-        public PersonaService(PersonaDAL personaDAL)
+        IUnidadDeTrabajo _unidadDeTrabajo;
+
+        public PersonaService(IUnidadDeTrabajo unidadDeTrabajo)
         {
-            _personaDAL = personaDAL;
+            _unidadDeTrabajo = unidadDeTrabajo;
         }
-        public void AddPersona(Persona persona)
+
+        Persona Convertir(PersonaDTO persona)
         {
-            _personaDAL.AddPersona(persona);
+            return new Persona
+            {
+                Id = persona.Id,
+                Identificación = persona.Identificación,
+                Nombre = persona.Nombre,
+                PrimerApellido = persona.PrimerApellido,
+                SegundoApellido = persona.SegundoApellido
+            };
         }
+
+        PersonaDTO Convertir(Persona persona)
+        {
+            return new PersonaDTO
+            {
+                Id = persona.Id,
+                Identificación = persona.Identificación,
+                Nombre = persona.Nombre,
+                PrimerApellido = persona.PrimerApellido,
+                SegundoApellido = persona.SegundoApellido
+            };
+        }
+
+        public void AddPersona(PersonaDTO persona)
+        {
+            var personaEntity = Convertir(persona);
+            _unidadDeTrabajo.PersonaDAL.Add(personaEntity);
+            _unidadDeTrabajo.Complete();
+        }
+
         public void DeletePersona(int id)
         {
-            _personaDAL.DeletePersona(id);
-        }
-        public List<Persona> GetPersonas()
-        {
-            return _personaDAL.GetPersonas();
-        }
-        public void UpdatePersona(Persona persona)
-        {
-            _personaDAL.UpdatePersona(persona);
+            var persona = new Persona { Id = id };
+            _unidadDeTrabajo.PersonaDAL.Remove(persona);
+            _unidadDeTrabajo.Complete();
         }
 
+        public List<PersonaDTO> GetPersonas()
+        {
+            var result = _unidadDeTrabajo.PersonaDAL.GetAllPersonas();
 
+            List<PersonaDTO> personas = new List<PersonaDTO>();
+            foreach (var item in result)
+            {
+                personas.Add(Convertir(item));
+            }
+            return personas;
+        }
+
+        public void UpdatePersona(PersonaDTO persona)
+        {
+            var personaEntity = Convertir(persona);
+            _unidadDeTrabajo.PersonaDAL.Update(personaEntity);
+            _unidadDeTrabajo.Complete();
+        }
+
+        public PersonaDTO GetPersonaById(int id)
+        {
+            var result = _unidadDeTrabajo.PersonaDAL.Get(id);
+            return Convertir(result);
+        }
     }
 }
