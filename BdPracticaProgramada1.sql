@@ -16,28 +16,44 @@ CREATE TABLE Personas (
 GO
 
 --Procedimiento almacenado para listar las personas que existan.
-CREATE PROCEDURE ListarPersonas
+CREATE PROCEDURE [dbo].[sp_GetAllPersonas]
 AS
 BEGIN
-    SELECT * FROM Personas;
-END;
+    -- Evita que se generen conjuntos de resultados adicionales
+    SET NOCOUNT ON;
+
+    -- Sentencia de selección para el procedimiento
+    SELECT * FROM Personas p
+    ORDER BY p.Id DESC;
+
+END
 GO
 
+
 --Procedimiento para crear personas en la base de datos.
-CREATE PROCEDURE CrearPersona
-    @Identificación VARCHAR(20),
-    @Nombre VARCHAR(50),
-    @PrimerApellido VARCHAR(50),
-    @SegundoApellido VARCHAR(50)
+CREATE PROCEDURE sp_AddPersona
+    @Identificacion varchar(20),
+    @Nombre varchar(50),
+    @PrimerApellido varchar(50),
+    @SegundoApellido varchar(50)
 AS
 BEGIN
+    -- SET NOCOUNT ON added to prevent extra result sets from
+    -- interfering with SELECT statements.
+    SET NOCOUNT ON;
+
+    -- Insert statements for procedure here
     INSERT INTO Personas (Identificación, Nombre, PrimerApellido, SegundoApellido)
-    VALUES (@Identificación, @Nombre, @PrimerApellido, @SegundoApellido);
-END;
+    VALUES (@Identificacion, @Nombre, @PrimerApellido, @SegundoApellido);
+
+    /*
+    Más código fuente aquí si es necesario
+    */
+END
 GO
 
 --Procedimiento para editar personas en la base de datos.
-CREATE PROCEDURE ModificarPersona
+CREATE PROCEDURE [dbo].[sp_UpdatePersona]
     @Id INT,
     @Identificación VARCHAR(20),
     @Nombre VARCHAR(50),
@@ -45,24 +61,30 @@ CREATE PROCEDURE ModificarPersona
     @SegundoApellido VARCHAR(50)
 AS
 BEGIN
+    SET NOCOUNT ON;
+
     UPDATE Personas
     SET Identificación = @Identificación,
         Nombre = @Nombre,
         PrimerApellido = @PrimerApellido,
         SegundoApellido = @SegundoApellido
     WHERE Id = @Id;
-END;
+END
 GO
 
+
 --Procedimiento para eliminar personas en la base de datos.
-CREATE PROCEDURE EliminarPersona
+CREATE PROCEDURE [dbo].[sp_DeletePersona]
     @Id INT
 AS
 BEGIN
+    SET NOCOUNT ON;
+
     DELETE FROM Personas
     WHERE Id = @Id;
-END;
+END
 GO
+
 
 Scaffold-DbContext "Server=Marcel\MSSQLSERVER01;Database=PracticaProgramada1;Integrated Security=True;Trusted_Connection=True;TrustServerCertificate=True;" Microsoft.EntityFrameworkCore.SqlServer -OutputDir Abstracciones -Force
 

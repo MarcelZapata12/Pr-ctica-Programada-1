@@ -1,6 +1,8 @@
 using Abstracciones.Abstracciones;
 using BackEnd.Services.Implementations;
 using BackEnd.Services.Interfaces;
+using DAL.Implementations;
+using DAL.Interfaces;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -11,15 +13,17 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-var app = builder.Build();
 
 
 #region DI
 builder.Services.AddDbContext<PracticaProgramada1Context>();
+builder.Services.AddScoped<IUnidadDeTrabajo, UnidadDeTrabajo>();
 builder.Services.AddScoped<IPersonaService, PersonaService>();
-
+builder.Services.AddScoped<IPersonaDAL, PersonaDAL>();
 
 #endregion
+
+var app = builder.Build();
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
