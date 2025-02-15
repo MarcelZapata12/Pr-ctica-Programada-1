@@ -64,4 +64,5 @@ BEGIN
 END;
 GO
 
+Scaffold-DbContext "Server=Marcel\MSSQLSERVER01;Database=PracticaProgramada1;Integrated Security=True;Trusted_Connection=True;TrustServerCertificate=True;" Microsoft.EntityFrameworkCore.SqlServer -OutputDir Abstracciones -Force
 
