@@ -13,13 +13,12 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-
-
-#region DI
+#region
 builder.Services.AddDbContext<PracticaProgramada1Context>();
 builder.Services.AddScoped<IUnidadDeTrabajo, UnidadDeTrabajo>();
 builder.Services.AddScoped<IPersonaService, PersonaService>();
 builder.Services.AddScoped<IPersonaDAL, PersonaDAL>();
+
 
 #endregion
 
