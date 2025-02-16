@@ -12,11 +12,11 @@ namespace DAL.Implementations
     {
         public IPersonaDAL PersonaDAL { get; set; }
 
-        private PracticaProgramada1Context _practicaProgramada1Context;
+        private PracticaProgramada1Context _context;
 
-        public UnidadDeTrabajo(PracticaProgramada1Context practicaProgramada1Context, IPersonaDAL personaDAL)
+        public UnidadDeTrabajo(PracticaProgramada1Context context,IPersonaDAL personaDAL)
         {
-            this._practicaProgramada1Context = practicaProgramada1Context;
+            this._context = context;
             this.PersonaDAL = personaDAL;
         }
 
@@ -24,7 +24,7 @@ namespace DAL.Implementations
         {
             try
             {
-                _practicaProgramada1Context.SaveChanges();
+                _context.SaveChanges();
                 return true;
             }
             catch (Exception)
@@ -35,7 +35,7 @@ namespace DAL.Implementations
 
         public void Dispose()
         {
-            this._practicaProgramada1Context.Dispose();
+            this._context.Dispose();
         }
     }
 }

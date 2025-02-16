@@ -32,13 +32,13 @@ namespace DAL.Implementations
         {
             try
             {
-                string sql = "exec [dbo].[sp_AddPersona] @Identificación, @Nombre, @PrimerApellido, @SegundoApellido";
+                string sql = "exec [dbo].[sp_AddPersona] @Identificacion, @Nombre, @PrimerApellido, @SegundoApellido";
 
                 var param = new SqlParameter[]
                 {
                     new SqlParameter()
                     {
-                        ParameterName = "@Identificación",
+                        ParameterName = "@Identificacion",
                         SqlDbType = System.Data.SqlDbType.VarChar,
                         Value = entity.Identificación
                     },
@@ -62,7 +62,9 @@ namespace DAL.Implementations
                     }
                 };
 
-                _context.Database.ExecuteSqlRaw(sql, param);
+                _context
+                    .Database
+                    .ExecuteSqlRaw(sql, param);
                 return true;
             }
             catch (Exception e)
@@ -71,90 +73,38 @@ namespace DAL.Implementations
             }
         }
 
-        public void DeletePersona(int id)
+        public bool Update(Persona entity)
         {
             try
             {
-                string sql = "exec [dbo].[sp_DeletePersona] @Id";
-
-                var param = new SqlParameter[]
-                {
-                    new SqlParameter()
-                    {
-                        ParameterName = "@Id",
-                        SqlDbType = System.Data.SqlDbType.Int,
-                        Value = id
-                    }
-                };
-
-                _context.Database.ExecuteSqlRaw(sql, param);
+                _context.Personas.Update(entity);
+                _context.SaveChanges();
+                return true;
             }
             catch (Exception e)
             {
+                return false;
             }
         }
 
-        public List<Persona> GetPersonas()
+        public bool Delete(int id)
         {
             try
             {
-                string sql = "exec [dbo].[sp_GetAllPersonas]";
-
-                var result = _context.Personas.FromSqlRaw(sql).ToList();
-                return result;
-            }
-            catch (Exception e)
-            {
-                return new List<Persona>();
-            }
-        }
-
-        public void UpdatePersona(Persona entity)
-        {
-            try
-            {
-                string sql = "exec [dbo].[sp_UpdatePersona] @Id, @Identificación, @Nombre, @PrimerApellido, @SegundoApellido";
-
-                var param = new SqlParameter[]
+                var entity = _context.Personas.Find(id);
+                if (entity != null)
                 {
-                    new SqlParameter()
-                    {
-                        ParameterName = "@Id",
-                        SqlDbType = System.Data.SqlDbType.Int,
-                        Value = entity.Id
-                    },
-                    new SqlParameter()
-                    {
-                        ParameterName = "@Identificación",
-                        SqlDbType = System.Data.SqlDbType.VarChar,
-                        Value = entity.Identificación
-                    },
-                    new SqlParameter()
-                    {
-                        ParameterName = "@Nombre",
-                        SqlDbType = System.Data.SqlDbType.VarChar,
-                        Value = entity.Nombre
-                    },
-                    new SqlParameter()
-                    {
-                        ParameterName = "@PrimerApellido",
-                        SqlDbType = System.Data.SqlDbType.VarChar,
-                        Value = entity.PrimerApellido
-                    },
-                    new SqlParameter()
-                    {
-                        ParameterName = "@SegundoApellido",
-                        SqlDbType = System.Data.SqlDbType.VarChar,
-                        Value = entity.SegundoApellido
-                    }
-                };
-
-                _context.Database.ExecuteSqlRaw(sql, param);
+                    _context.Personas.Remove(entity);
+                    _context.SaveChanges();
+                    return true;
+                }
+                return false;
             }
             catch (Exception e)
             {
-
+                return false;
             }
         }
     }
 }
+

@@ -1,6 +1,6 @@
 using Abstracciones.Abstracciones;
-using BackEnd.Services.Implementations;
-using BackEnd.Services.Interfaces;
+using Back.Services.Implementations;
+using Back.Services.Interfaces;
 using DAL.Implementations;
 using DAL.Interfaces;
 
@@ -21,6 +21,7 @@ builder.Services.AddScoped<IPersonaDAL, PersonaDAL>();
 
 
 #endregion
+
 
 var app = builder.Build();
 

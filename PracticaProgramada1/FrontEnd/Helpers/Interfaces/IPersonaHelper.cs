@@ -6,9 +6,9 @@ namespace FrontEnd.Helpers.Interfaces
     {
         List<PersonaViewModel> GetPersonas();
         PersonaViewModel GetPersona(int id);
-        PersonaViewModel AddPersona(PersonaViewModel persona);
-        PersonaViewModel UpdatePersona(int id, PersonaViewModel persona);
-        bool DeletePersona(int id);
+        PersonaViewModel Add(PersonaViewModel persona);
+        PersonaViewModel Update(PersonaViewModel persona);
+        void Delete(int id);
 
 
     }

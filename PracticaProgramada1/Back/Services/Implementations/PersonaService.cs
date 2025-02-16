@@ -1,21 +1,21 @@
 ﻿using Abstracciones.Abstracciones;
-using BackEnd.DTO;
-using BackEnd.Services.Interfaces;
+using Back.DTO;
+using Back.Services.Interfaces;
 using DAL.Interfaces;
 using System.Collections.Generic;
 
-namespace BackEnd.Services.Implementations
+namespace Back.Services.Implementations
 {
     public class PersonaService : IPersonaService
     {
-        IUnidadDeTrabajo _unidadDeTrabajo;
+        private readonly IUnidadDeTrabajo _unidadDeTrabajo;
 
         public PersonaService(IUnidadDeTrabajo unidadDeTrabajo)
         {
             _unidadDeTrabajo = unidadDeTrabajo;
         }
 
-        Persona Convertir(PersonaDTO persona)
+        private Persona Convertir(PersonaDTO persona)
         {
             return new Persona
             {
@@ -27,7 +27,7 @@ namespace BackEnd.Services.Implementations
             };
         }
 
-        PersonaDTO Convertir(Persona persona)
+        private PersonaDTO Convertir(Persona persona)
         {
             return new PersonaDTO
             {
@@ -77,5 +77,10 @@ namespace BackEnd.Services.Implementations
             var result = _unidadDeTrabajo.PersonaDAL.Get(id);
             return Convertir(result);
         }
+        
+
+
+
+
     }
 }

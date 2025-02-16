@@ -1,4 +1,4 @@
-﻿namespace BackEnd.DTO
+﻿namespace Back.DTO
 {
     public class PersonaDTO
     {

@@ -1,7 +1,7 @@
 ﻿using Abstracciones.Abstracciones;
-using BackEnd.DTO;
+using Back.DTO;
 
-namespace BackEnd.Services.Interfaces
+namespace Back.Services.Interfaces
 {
     public interface IPersonaService
     {

@@ -1,10 +1,10 @@
-﻿using BackEnd.DTO;
-using BackEnd.Services.Implementations;
-using BackEnd.Services.Interfaces;
+﻿using BackEndd.DTO;
+using BackEndd.Services.Implementations;
+using BackEndd.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using Abstracciones.Abstracciones;
 
-namespace BackEnd.Controllers
+namespace BackEndd.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
